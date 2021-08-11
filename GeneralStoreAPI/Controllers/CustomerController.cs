@@ -32,7 +32,7 @@ namespace GeneralStoreAPI.Controllers
 
             if (await _context.SaveChangesAsync() > 0)
             {
-                return Ok();
+                return Ok($"{customer.FullName} has been added successfully!");
             }
 
             return InternalServerError();
