@@ -13,7 +13,7 @@ namespace GeneralStoreAPI.Controllers
 {
     public class CustomerController : ApiController
     {
-        private readonly ApplicationDbContext _context = new ApplicationDbContext();
+        private readonly StoreDBContext _context = new StoreDBContext();
 
         [HttpPost]
         public async Task<IHttpActionResult> Post([FromBody] Customer customer)

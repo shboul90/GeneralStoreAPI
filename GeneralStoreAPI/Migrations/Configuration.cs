@@ -5,14 +5,14 @@ namespace GeneralStoreAPI.Migrations
     using System.Data.Entity.Migrations;
     using System.Linq;
 
-    internal sealed class Configuration : DbMigrationsConfiguration<GeneralStoreAPI.Models.ApplicationDbContext>
+    internal sealed class Configuration : DbMigrationsConfiguration<GeneralStoreAPI.Models.StoreDBContext>
     {
         public Configuration()
         {
             AutomaticMigrationsEnabled = false;
         }
 
-        protected override void Seed(GeneralStoreAPI.Models.ApplicationDbContext context)
+        protected override void Seed(GeneralStoreAPI.Models.StoreDBContext context)
         {
             //  This method will be called after migrating to the latest version.
 

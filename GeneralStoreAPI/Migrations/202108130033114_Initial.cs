@@ -3,7 +3,7 @@ namespace GeneralStoreAPI.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class AddedReferenceToClassesInDb : DbMigration
+    public partial class Initial : DbMigration
     {
         public override void Up()
         {

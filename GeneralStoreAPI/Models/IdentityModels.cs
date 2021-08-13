@@ -24,11 +24,7 @@ namespace GeneralStoreAPI.Models
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
-        public DbSet<Customer> Customers { get; set; }
 
-        public DbSet<Product> Products { get; set; }
-
-        public DbSet<Transaction> Transactions { get; set; }
 
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)
