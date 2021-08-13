@@ -13,7 +13,7 @@ namespace GeneralStoreAPI.Controllers
 {
     public class ProductController : ApiController
     {
-        private readonly StoreDBContext _context = new StoreDBContext();
+        private readonly StoreDBContext _content = new StoreDBContext();
 
         [HttpPost]
         public async Task<IHttpActionResult> Post([FromBody] Product product)
@@ -25,14 +25,15 @@ namespace GeneralStoreAPI.Controllers
 
             var productEntity = new Product
             {
+                SKU = product.SKU,
                 Name = product.Name,
                 Cost = product.Cost,
                 NumberInInventory = product.NumberInInventory,
             };
 
-            _context.Products.Add(productEntity);
+            _content.Products.Add(productEntity);
 
-            if (await _context.SaveChangesAsync() > 0)
+            if (await _content.SaveChangesAsync() > 0)
             {
                 return Ok($"Product: {productEntity.Name} was adeed to the database");
             }
@@ -43,18 +44,20 @@ namespace GeneralStoreAPI.Controllers
         [HttpGet]
         public async Task<IHttpActionResult> Get()
         {
-            var products = await _context.Products.ToListAsync();
+            var products = await _content.Products.ToListAsync();
             return Ok(products);
         }
 
         [HttpGet]
         public async Task<IHttpActionResult> Get([FromUri] string sku)
         {
-            var product = await _context.Products.SingleOrDefaultAsync(d => d.SKU == sku);
+            var product = await _content.Products.FindAsync(sku);
+
             if (product is null)
             {
                 return NotFound();
             }
+
             return Ok(product);
             //_context.Dogs.Single(d => d.ID == id); will blow up app
         }
