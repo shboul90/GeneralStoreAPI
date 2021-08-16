@@ -18,9 +18,14 @@ namespace GeneralStoreAPI.Controllers
         [HttpPost]
         public async Task<IHttpActionResult> Post([FromBody] Product product)
         {
-            if (!ModelState.IsValid || product is null)
+            if (product is null)
             {
                 return BadRequest();
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
             }
 
             var productEntity = new Product

@@ -18,9 +18,14 @@ namespace GeneralStoreAPI.Controllers
         [HttpPost]
         public async Task<IHttpActionResult> Post([FromBody] Customer customer)
         {
-            if (!ModelState.IsValid || customer is null)
+            if (customer is null)
             {
                 return BadRequest();
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
             }
 
             var customerEntity = new Customer
@@ -87,7 +92,7 @@ namespace GeneralStoreAPI.Controllers
             customer.FirstName = newCustomerData.FirstName;
             customer.LastName = newCustomerData.LastName;
 
-            if (await _context.SaveChangesAsync() == 1)
+            if (await _context.SaveChangesAsync() > 0)
             {
                 return Ok($"Customer ID: {customer.ID} has been updated to {customer.FullName}");
             }

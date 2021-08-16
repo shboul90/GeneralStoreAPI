@@ -9,6 +9,7 @@ namespace GeneralStoreAPI.Models.Data_POCOs.Products
     public class Product
     {
         [Key]
+        [Required]
         public string SKU { get; set; }
 
         [Required]
