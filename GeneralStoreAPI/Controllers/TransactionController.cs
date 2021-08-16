@@ -100,5 +100,119 @@ namespace GeneralStoreAPI.Controllers
 
             return Ok(transactions);
         }
+
+        [HttpGet]
+        public async Task<IHttpActionResult> Get(int customerID, int param2)
+        {
+            if (customerID < 0)
+            {
+                return BadRequest();
+            }
+
+            var allTransactions = await _contentTransactions.Transactions.ToListAsync();
+
+            if (allTransactions is null)
+            {
+                return NotFound();
+            }
+
+            List<Transaction> customerTransactions = new List<Transaction>();
+
+            foreach(Transaction t in allTransactions)
+            {
+                if (t.CustomerId == customerID)
+                {
+                    customerTransactions.Add(t);
+                }
+            }
+
+            if (customerTransactions is null)
+            {
+                return NotFound();
+            }
+
+            return Ok(customerTransactions);
+        }
+
+        [HttpGet]
+        public async Task<IHttpActionResult> Get([FromBody] DateTime DateFrom, [FromBody] DateTime DateTo)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            if(DateFrom>=DateTo)
+            {
+                return BadRequest("DateFrom should be less than DateTo");
+            }
+
+            var allTransactions = await _contentTransactions.Transactions.ToListAsync();
+
+            if (allTransactions is null)
+            {
+                return NotFound();
+            }
+
+            List<Transaction> dateRangeTransactions = new List<Transaction>();
+
+            foreach (Transaction t in allTransactions)
+            {
+                if (t.DateOfTransaction >= DateFrom && t.DateOfTransaction <= DateTo)
+                {
+                    dateRangeTransactions.Add(t);
+                }
+            }
+
+            if (dateRangeTransactions is null)
+            {
+                return NotFound();
+            }
+
+            return Ok(dateRangeTransactions);
+        }
+
+        [HttpGet]
+        public async Task<IHttpActionResult> Get(string ProductSKU)
+        {
+            if (await _contentProducts.Products.FindAsync(ProductSKU) is null)
+            {
+                return BadRequest("Product doesnt exist");
+            }
+
+            var allTransactions = await _contentTransactions.Transactions.ToListAsync();
+
+            if (allTransactions is null)
+            {
+                return NotFound();
+            }
+
+            List<Transaction> productTransactions = new List<Transaction>();
+
+            foreach (Transaction t in allTransactions)
+            {
+                if (t.ProductSKU == ProductSKU)
+                {
+                    productTransactions.Add(t);
+                }
+            }
+
+            if (productTransactions is null)
+            {
+                return NotFound();
+            }
+
+            double sales;
+            double totalSales = 0;
+            int itemCountTotal = 0;
+
+            foreach (Transaction x in productTransactions)
+            {
+                sales = x.ItemCount * x.Product.Cost;
+                totalSales = totalSales + sales;
+                itemCountTotal = itemCountTotal + x.ItemCount;
+            }
+
+            return Ok($"The total sales for product ID: {ProductSKU} was ${totalSales} or a total number of {itemCountTotal}");
+        }
     }
 }
